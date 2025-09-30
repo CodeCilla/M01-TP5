@@ -30,11 +30,11 @@ jobs:
       # Authentifier la Railway avec ton token secret
       - name: Deploy to Railway
         env:
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: |
           cd backend
-          railway up --detach --project ${{ secrets.RAILWAY_PROJECT_ID }}
-          
+          railway up --detach
+
   frontend:
     name: Deploy on Netlify
     runs-on: ubuntu-latest
