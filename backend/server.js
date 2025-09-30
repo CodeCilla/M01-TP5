@@ -28,7 +28,7 @@ let tasks = [
   },
   {
     id: 3,
-    title: 'Appeler Nico Plombier',
+    title: 'Appeler Caselec Plombier',
     description: 'Prendre rendez-vous pour la fuite dans la salle de bain.',
     completed: false,
   },
