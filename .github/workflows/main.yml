@@ -21,17 +21,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t my-backend-image ./backend
 
-      # Installer Railway CLI pour pouvoir déployer
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          export PATH="$HOME/.railway/bin:$PATH"
-
-      - name: Check railway.toml presence
-        run: |
-          ls -la backend/
-          cat backend/railway.toml
-
       # Authentifier la Railway avec ton token secret
       - name: Deploy to Railway
         env:
