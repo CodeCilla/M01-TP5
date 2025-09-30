@@ -1,5 +1,4 @@
 name: Deploy to Railway and Netlify
-
 on:
   push:
     branches:
@@ -7,46 +6,52 @@ on:
 
 jobs:
   backend:
-    name: Build Docker + Deploy on Railway
-    runs-on: ubuntu-latest   # ← Obligatoire
+    name: build Docker + déploy on Railway
     steps:
-      # Récupérer le code
+      # Récupérer le code depuis le dépôt
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Construire l'image Docker
+      # Installer Docker Buildx (utile pour builder des images Docker multi-plateformes)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Construire l'image Docker de ton backend
       - name: Build Docker image
-        run: docker build -t my-backend .
+        run: docker build -t my-backend-image .
 
-      # Installer Railway CLI
+      # Installer Railway CLI pour pouvoir déployer
       - name: Install Railway CLI
-        run: curl -fsSL https://railway.app/install.sh | sh
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          export PATH="$HOME/.railway/bin:$PATH"
 
-      # Authentifier Railway avec ton token secret
-      - name: Authenticate Railway
+      # Authentifier la CLI Railway avec ton token secret
+      - name: Authenticate Railway CLI
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: railway login --token $RAILWAY_API_TOKEN
 
-      # Déployer le backend
+      # Déployer le backend sur Railway
       - name: Deploy to Railway
-        run: railway up --detach
+        run: |
+          railway up --detach
 
   frontend:
     name: Deploy on Netlify
     runs-on: ubuntu-latest
     steps:
-      # Récupérer le code
+      # Récupérer le code depuis le dépôt
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Installer Node.js
+      # Installer Node.js (version 24)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '24'
 
-      # Installer les dépendances
+      # Installer les dépendances du frontend
       - name: Install dependencies
         run: npm install
         working-directory: ./frontend
@@ -56,11 +61,11 @@ jobs:
         run: npm run build
         working-directory: ./frontend
 
-      # Déployer sur Netlify
+      # Déployer le frontend sur Netlify en utilisant Netlify CLI
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
           npm install -g netlify-cli
-          netlify deploy --dir=./frontend/dist --prod --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
+          netlify deploy --dir=./frontend/dist --prod --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN comment je fais pour le lancer à chaque push sur main
