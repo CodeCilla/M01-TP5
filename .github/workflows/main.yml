@@ -38,7 +38,9 @@ jobs:
 
       # Construire le projet frontend
       - name: Build frontend
-        run: npm run build
+        run: |
+          echo "VITE_API_URL=$VITE_API_URL"
+          npm run build
         working-directory: ./frontend
 
       # Déployer le frontend sur Netlify en utilisant Netlify CLI
