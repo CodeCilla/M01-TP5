@@ -28,7 +28,7 @@ let tasks = [
   },
   {
     id: 3,
-    title: 'Appeler électricien',
+    title: 'Appeler Nico Plombier',
     description: 'Prendre rendez-vous pour la fuite dans la salle de bain.',
     completed: false,
   },
