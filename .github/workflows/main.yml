@@ -7,6 +7,7 @@ on:
 jobs:
   backend:
     name: build Docker + déploy on Railway
+    runs-on: ubuntu-latest
     steps:
       # Récupérer le code depuis le dépôt
       - name: Checkout repository
