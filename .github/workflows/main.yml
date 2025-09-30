@@ -7,28 +7,15 @@ on:
 jobs:
   backend:
     name: build Docker + déploy on Railway
-    runs-on: ubuntu-latest
-    steps:
-      # Récupérer le code depuis le dépôt
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Installer Docker Buildx
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      # Construire l'image Docker de ton backend
-      - name: Build Docker image
-        run: docker build -t my-backend-image ./backend
-
-      # Authentifier la Railway avec le token secret
-      - name: Deploy to Railway
-        env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
-        run: |
-          run: |
-            cd backend
-            railway up --detach
+    deploy:
+      runs-on: ubuntu-latest
+      container: ghcr.io/railwayapp/cli:latest
+      env:
+        SVC_ID: 6c07e213-7b85-4efb-9ff9-03529f79f4f0
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+      steps:
+        - uses: actions/checkout@v3
+        - run: railway up --service=${{ env.SVC_ID }}
 
   frontend:
     name: Deploy on Netlify
