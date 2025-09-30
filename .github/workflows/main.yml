@@ -21,14 +21,13 @@ jobs:
       - name: Build Docker image
         run: docker build -t my-backend-image ./backend
 
-      # Authentifier la Railway avec ton token secret
+      # Authentifier la Railway avec le token secret
       - name: Deploy to Railway
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: |
           cd backend
-          ~/.railway/bin/railway link --project c5ac27f4-d9ac-48b9-914d-38526026ee90 --yes
-          ~/.railway/bin/railway up --detach
+          $HOME/.railway/bin/railway up --detach
 
   frontend:
     name: Deploy on Netlify
