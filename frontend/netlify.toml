@@ -1,0 +1,9 @@
+[build]
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "24"
+  NPM_CONFIG_BUILD_FROM_SOURCE = "true"
+  VITE_API_URL = "https://m01-tp5-production.up.railway.app" # si tu en as besoin
